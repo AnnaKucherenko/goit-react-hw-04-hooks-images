@@ -1,38 +1,22 @@
-import React, { Component } from 'react';
-// import Modal from './components/Modal/Modal';
+import { useState } from 'react';
+
 import Searchbar from 'components/searchbar/Saerchbar';
 import ImageGallery from './components/imageGallery/ImageGallery';
-// import Button from './components/Button/Button';
 
+export default function App () {
+  const [images, setImages] = useState('');
 
-class App extends Component {
-  state={
-    images:'',
-  }
-
-  handleFormSubmit = images =>{
-    this.setState({images})
-    
+  const handleFormSubmit = img =>{
+    setImages(img);
   };
 
-  render() {
-    const {images}  = this.state;
-
-    return (
+  return (
       <div>
-        {/* {showModal&&<Modal onClose={this.toggleModal}/>} */}
-        <Searchbar onSubmit={this.handleFormSubmit}/>
-        {images&&<ImageGallery imagesSearch={this.state.images}/>}
-        {/* {images&&<Button />} */}
-        
+        <Searchbar onSubmit={handleFormSubmit}/>
+        {images&&<ImageGallery imagesSearch={images}/>}
+             
       </div>
-    ); 
+  ); 
+}
 
   
-  }; 
-
-  }
-
-  
-
-export default  App;
