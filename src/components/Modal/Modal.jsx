@@ -1,23 +1,26 @@
 import { useEffect } from 'react'; 
 import {createPortal}from 'react-dom';
+import PropTypes from "prop-types";
 import styles from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
 
 export default function Modal ({imageLarge, onClose}) {
     useEffect(()=>{
+        const handleKeyDown = e => {
+                if(e.code === 'Escape'){
+                    onClose();
+                }
+            }
+
         window.addEventListener('keydown', handleKeyDown);
         return ()=>{
             console.log('функція розмонтування');
             window.removeEventListener('keydown', handleKeyDown);
         }
-    },[]);
+    },[onClose]);
 
-    const handleKeyDown = e => {
-        if(e.code === 'Escape'){
-            onClose();
-        }
-    }
+    
 
     const handleBackdropClick = evt =>{
         if(evt.currentTarget === evt.target){
@@ -34,4 +37,9 @@ export default function Modal ({imageLarge, onClose}) {
             modalRoot,
     );
     
+}
+
+Modal.propTypes = {
+    imageLarge: PropTypes.string.isRequired,
+    onClose: PropTypes.func.isRequired,
 }

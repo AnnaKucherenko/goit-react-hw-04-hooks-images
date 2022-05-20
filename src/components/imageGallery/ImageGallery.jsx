@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import PropTypes from "prop-types";
 import ImageGalleryItem from '../imageGalleryItem/ImageGalleryItem';
 import Button from 'components/Button/Button';
 import Modal from 'components/Modal/Modal';
@@ -29,15 +30,11 @@ export default function ImagesGallery ({imagesSearch}){
 
     updateRequest();
 
-    const changeArreyImages = (imagesArr) => {
-        if(page>1){
-            setImages([...images, ...imagesArr])
-        }else{
-            setImages(imagesArr); 
-        }
-    }
-
+    
     useEffect(()=>{
+        if(query===''){
+            return
+        }
         fetch(`https://pixabay.com/api/?q=${query}&page=${page}&key=25716572-e092d498007de7d313bf56634&image_type=photo&orientation=horizontal&per_page=12`)
             .then(response=>{
                 if(response.ok){
@@ -47,9 +44,14 @@ export default function ImagesGallery ({imagesSearch}){
             })
             .then(img =>{
                 const imagesArr = img.hits;
+                     
+                if(page>1){
+                    setImages(prevState=> [...prevState, ...imagesArr])
+                }else{
+                    setImages(imagesArr); 
+                }
                 setStatus('resolved');
-                changeArreyImages(imagesArr);
-                      
+                                     
             })
             .catch(error=>{
                 setError(error); 
@@ -85,4 +87,8 @@ export default function ImagesGallery ({imagesSearch}){
                 </div>
             )
     }
+}
+
+ImagesGallery.propTypes = {
+    imagesSearch: PropTypes.string.isRequired,
 }
